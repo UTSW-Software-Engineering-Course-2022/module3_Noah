@@ -38,6 +38,7 @@ xlabel('k_c');ylabel('H');
 %% Compute the internal force and potential that regulates the edge length of the triangular meshes
 m.pm.Vdh.V0=0.02; %adjusting the internal force
 [Fi] = Finternal(m,'plot_or_not',true);
+
 %% Remeshing, blue: edge manipulated, green: replacement edges 
 [~,remeshed,edg_add] = Remesh(m,0,1,[min(Fi.rg),max(Fi.rg)],'plot_or_not',true);
 [~,remeshed,edg_add] = Remesh(new_m,1,1,[min(Fi.rg),max(Fi.rg)],'plot_or_not',true);
