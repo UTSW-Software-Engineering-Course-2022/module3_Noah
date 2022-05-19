@@ -19,7 +19,7 @@ classdef TestRBC < matlab.unittest.TestCase
         F_v
     end
     
-    methods (TestMethodSetup)
+    methods (TestClassSetup)
         function createVars(testCase)
             disp('---- Setting Up TestCases ---');
             
@@ -56,14 +56,14 @@ classdef TestRBC < matlab.unittest.TestCase
         end
     end
     
-    methods (TestMethodTeardown)    
-        function destroyVars(testCase)
-            disp('---- Start Tear Down  --------');
-            A = testCase.m.Area();
-            fprintf('Area: %f, %f\n', sum(A), testCase.Area_r);
-            disp('----Tearing Down Complete --------');
-        end
-    end
+%     methods (TestMethodTeardown)    
+%         function destroyVars(testCase)
+%             disp('---- Start Tear Down  --------');
+%             A = testCase.m.Area();
+%             fprintf('Area: %f, %f\n', sum(A), testCase.Area_r);
+%             disp('----Tearing Down Complete --------');
+%         end
+%     end
     
     methods (Test)
           
@@ -90,8 +90,10 @@ classdef TestRBC < matlab.unittest.TestCase
         function testMeshCreate(testCase)
             disp('Unit Testing Mesh Object Instantiation')
             m_test = ModMembrane(2, 'unit', testCase.u);
-            assertInstanceOf(testCase, m_test, 'ModMembrane');
-            assertInstanceOf(testCase, m_test, 'struct');
+            % assertInstanceOf(m_test, 'ModMembrane');
+            % assertInstanceOf(m_test, 'struct');
+            import matlab.unittest.constraints.IsOfClass
+            testCase.verifyThat(m_test,IsOfClass('ModMembrane'))
         end
         
         % TODO: Need to fill more tests for convergence of area, volume, min_dt
@@ -111,12 +113,13 @@ classdef TestRBC < matlab.unittest.TestCase
             testCase.verifyThat(last_10_Vs, IsEqualTo(testCase.Volume_r, 'Within', AbsoluteTolerance(7)))
         end
         
-        function testVolumeConvergence(testCase)
+        function testmindtConvergence(testCase)
             disp('Testing Fi only min_dt Convergence after 1000 iterations')
             import matlab.unittest.constraints.IsEqualTo
             import matlab.unittest.constraints.AbsoluteTolerance
+            import matlab.unittest.constraints.IsLessThan
             last_10_min_dts = mean(testCase.min_dts(length(testCase.min_dts)-10:length(testCase.min_dts)));
-            testCase.verifyThat(last_10_min_dts, IsEqualTo(testCase.min_dts, 'Within', AbsoluteTolerance(7)))
+            testCase.verifyThat(last_10_min_dts,IsLessThan(0.05))
         end
     end
 end
