@@ -1,5 +1,5 @@
 %% Calculate dt
-function min_dt = calculate_delta_t(m,Fi,F_tot,L)
+function min_dt = calculate_delta_t(m,Fi,F_tot,L,X_int_mtx)
     
     dt_mtx = NaN(length(m.var.edge_all),1);
     dr = Fi.rn(2) - Fi.rn(1);
@@ -11,7 +11,7 @@ function min_dt = calculate_delta_t(m,Fi,F_tot,L)
         i_coord = m.var.coord(m.var.edge_all(edge,1),:);
         j_coord = m.var.coord(m.var.edge_all(edge,2),:);
 
-        X_int = floor(L(i,j)/dr + 0.5) - floor(Fi.rn(1)/dr+0.5);
+        X_int = X_int_mtx(edge,1);
 
         l_plus_num = (0.5 * (Fi.rg(Fi.in(X_int)) + Fi.rg(Fi.in(X_int)+1)))^2 - L(i, j)^2;
         l_minus_num = (0.5 * (Fi.rg(Fi.in(X_int)-2) + Fi.rg(Fi.in(X_int)-1)))^2 - L(i, j)^2;

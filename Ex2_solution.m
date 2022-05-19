@@ -51,4 +51,6 @@ subplot(1,2,2);
 plot(m,'f',fig);
 
 %% Plot edge length stds
-plot(linspace(1,t,t), stds)
+plot(linspace(1,t,t), stds, figure2);
+disp(std(stds(200:t)));
+% std after convergence == 0.0024

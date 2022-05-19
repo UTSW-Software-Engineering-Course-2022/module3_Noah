@@ -1,0 +1,87 @@
+close, clear all;
+%% Setup the directory where the membrane object is located and add the directory to Matlab's function pool 
+dir_mod = '/home2/s438167/module3_Noah';
+addpath(dir_mod);
+%--------------------------------------------------------------------------
+% create 'unit' u using the unit module, and 'membrane' m using the membrane module 
+u=ComUnit('erg',ComUnit.nm_to_cm(1000),300,ComUnit.kBT_to_erg(10,300)); 
+before_m=ModMembrane(2,'unit',u);
+m = before_m;
+
+%% Params
+% Values for Forces
+%{
+kL = 2.1 × 10 ^ -4 N/m    
+kB = 5.3 × 10 ^-15 J/rad
+kA = 1.4 × 10 ^ 11 N/m^2
+kV = 7.0 × 10 ^-10 J
+%}
+
+delta_val = 1e-4;
+
+m.pm.k_c = 0.1; % 100 makes it elongate along x, 0.001 makes it dimple star
+k_a = 0.5; % 5 flattens, 0.001 also elongate
+k_v = 0.2; % 10 makes pointy % 0.1 makes concave
+k_r = 0.0;
+
+m.pm.Vdh.V0=0.02; %adjusting the internal force
+
+r=mean(sqrt(sum(m.var.coord(:,1).^2+m.var.coord(:,2).^2+m.var.coord(:,3).^2,2)));
+
+%% Langevin Propagation
+[Fi] = Finternal(m);
+
+% Do timesteps
+t = 3000;
+
+% keep track of std
+stds = NaN(t,1);
+
+
+for i = 1:t
+    X = sprintf('Running time step %d',i);
+    disp(X)
+    
+    [L, L_edge_all, dir_ij] = compute_L_and_dir_ij(m);
+    
+    std_edge_l = std(L_edge_all,1);
+    stds(i) = std_edge_l;
+    Y = sprintf('Std of edge length %d',std_edge_l);
+    disp(Y)
+    
+    % Calc Forces
+    [F_tot, X_int_mtx] = compute_F_tot(m,Fi,dir_ij,L);
+    [F_b, F_a, F_v] = calculate_forces(m, delta_val, k_a, k_v, r);
+    F_r = k_r * randn(m.var.n_coord, 3); 
+    F_tot = (F_tot + F_r + F_b + F_a + F_v);
+    min_dt = calculate_delta_t(m,Fi,F_tot,L, X_int_mtx);
+    m.var.coord = m.var.coord + m.pm.mu * F_tot * min_dt;
+    
+    rLim=[min(Fi.rg),max(Fi.rg)];
+    [m] = RemeshCtrl(m,Fi,rLim);
+    
+    if mod(i,500) == 0
+
+       h = figure;
+       plot(m,'f',h);
+       savefig(h, strcat('/home2/s438167/module3_Noah/outputs/iteration_', string(i),'.fig'))
+        
+    end
+
+end    
+
+%% Plot Before and after
+fig=figure;
+subplot(1,2,1);
+plot(before_m,'f',fig);
+subplot(1,2,2);
+plot(m,'f',fig);
+
+filename = strcat(string(m.pm.k_c), '_', string(k_a), '_', string(k_v));
+filename = strcat(filename, '.png');
+saveas(fig,strcat('/home2/s438167/module3_Noah/outputs/', filename));
+
+% %% Plot edge length stds
+% plot(linspace(1,t,t), stds, figure2);
+% disp(std(stds(200:t)));
+% % std after convergence == 0.0024
