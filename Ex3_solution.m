@@ -22,8 +22,8 @@ t = 3000;
 
 r=mean(sqrt(sum(m.var.coord(:,1).^2+m.var.coord(:,2).^2+m.var.coord(:,3).^2,2)));
 
-%% Langevin Propagation
-[m,stds,As,Vs,min_dts] = Run_RBC_iterations(m, V0, k_c, k_a, k_v, k_r, t, delta_val, true);
+%% Langevin Equation
+[m,stds,As,Vs,min_dts] = Run_iterations_LE(m, V0, k_c, k_a, k_v, k_r, t, delta_val, false);
 
 %% Plot Before and after
 fig=figure;
