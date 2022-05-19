@@ -24,7 +24,7 @@ classdef TestRBC < matlab.unittest.TestCase
             disp('---- Setting Up TestCases ---');
             
             % Saved mat file that contains ground truth matrices
-            testCase.ground_truth = matfile("/ground_truth/ground_truth.mat");
+            testCase.ground_truth = matfile("module3_Noah/ground_truth/ground_truth.mat");
             
             % This is in essences an integration test
             u = ComUnit('erg', ComUnit.nm_to_cm(1000), 300, ...
@@ -40,7 +40,7 @@ classdef TestRBC < matlab.unittest.TestCase
             testCase.u = u;
             
             % Run with just the internal force. This should converge
-            [m_after,stds,As,Vs,min_dts] = Run_RBC_iterations(...
+            [m_after,stds,As,Vs,min_dts] = Run_iterations_LE(...
                 m, 0.02, 0, 0, 0, 0, 1000, 0.0001, false);
             testCase.stds = stds;
             testCase.As = As;
@@ -95,13 +95,28 @@ classdef TestRBC < matlab.unittest.TestCase
         end
         
         % TODO: Need to fill more tests for convergence of area, volume, min_dt
-%         function testAreaAbsTolerance(testCase)
-%            import matlab.unittest.constraints.IsEqualTo
-%            import matlab.unittest.constraints.AbsoluteTolerance
-%             A1 = testCase.m.Area();
-%             testCase.verifyThat(sum(A1), IsEqualTo(testCase.Area_r, 'Within', AbsoluteTolerance(5)))
-%         end
+        function testAreaConvergence(testCase)
+            disp('Testing Fi only Area Convergence after 1000 iterations')
+            import matlab.unittest.constraints.IsEqualTo
+            import matlab.unittest.constraints.AbsoluteTolerance
+            last_10_As = mean(testCase.As(length(testCase.As)-10:length(testCase.As)));
+            testCase.verifyThat(last_10_As, IsEqualTo(testCase.Area_r, 'Within', AbsoluteTolerance(3)))
+        end
         
-
+        function testVolumeConvergence(testCase)
+            disp('Testing Fi only Volume Convergence after 1000 iterations')
+            import matlab.unittest.constraints.IsEqualTo
+            import matlab.unittest.constraints.AbsoluteTolerance
+            last_10_Vs = 0.6 * mean(testCase.Vs(length(testCase.Vs)-10:length(testCase.Vs)));
+            testCase.verifyThat(last_10_Vs, IsEqualTo(testCase.Volume_r, 'Within', AbsoluteTolerance(7)))
+        end
+        
+        function testVolumeConvergence(testCase)
+            disp('Testing Fi only min_dt Convergence after 1000 iterations')
+            import matlab.unittest.constraints.IsEqualTo
+            import matlab.unittest.constraints.AbsoluteTolerance
+            last_10_min_dts = mean(testCase.min_dts(length(testCase.min_dts)-10:length(testCase.min_dts)));
+            testCase.verifyThat(last_10_min_dts, IsEqualTo(testCase.min_dts, 'Within', AbsoluteTolerance(7)))
+        end
     end
 end
