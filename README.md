@@ -1,8 +1,12 @@
 # Module 3 Noah
 This is a repository for the module 3 of Software Design Workshop.
 
+\
+
 ## Exercise 1
+
 ### Functions
+
 **Generate Figure 1 of the paper. Slide the coordinate of the points along the sphere. **
 
 ```matlab 
@@ -28,11 +32,16 @@ useful for visualization.
 <figcaption> <b> Figure 1. </b> Exercise 1 Results </figcaption>
 </figure>
 
+\
+\
+\
+
 ## Exercise 2
 
 **Implement the Langevin Equation and simulate sphere with the internal force.**
 
 ### Functions
+
 ```matlab
 [L, L_edge_all, dir_ij] = compute_L_and_dir_ij(m)
 ```
@@ -59,6 +68,10 @@ The `calculate_delta_t` first calculates the dt per vertex, and returns the mini
 <img src="./figures/Ex2.png">
 <figcaption> <b> Figure 2. </b> Exercise 2 Results </figcaption>
 </figure>
+
+\
+\
+\
 
 ## Exercise 3
 
@@ -88,9 +101,30 @@ running the `calculate_forces` in parallel or not. If true, the forces will be c
 <figcaption> <b> Figure 3. </b> Red Blood Cell simulation and convergence plot </figcaption>
 </figure>
 
+\
+
 We see above that the sphere has transformed into a shape of Red Blood Cell(RBC) in 1500 iterations.
 To check the convergence, the ratio between the current value and the optimum value for area and volume were plotted.
 We can observe in the right panel that the convergence occurs after ~1300 iterations.
+
+## Testing
+
+For unit testing and integration testing, I generated a "ground truth" outputs for `calculate_forces` and `calculate_F_tot`.
+These functions should always output the same results when given a same set of cartesian coordinates.
+the `./ground_truth/grouth_truth.mat` includes the coordinates and the expected outputs, and the functions
+`calculate_forces` and `caculate_F_tot` are tested in `test_calculate_forces` and `testF_tot`. I have created the local variable
+for the outputs of the `calculate_forces` and `caculate_F_tot` to local variable within testing scope,
+rather than class properties per Andrew's suggestion. `caculate_F_tot` depends on the output from `calculate_L_and_dir_ij`, so in essence,
+the `testF_tot` is an integration test.
+
+Regression testing was conducted on the convergence of 1000 iteration of `Run_iterations_LE`, with internal force only.
+After the 1000 iterations, the mesh should converge to a dice-like structure with `Area()` and `Volume()` outputs for
+the last 10 iterations should be close to the optimal values, `A_0` and `V_0`. The `min_dt` should be very small too.
+These tests are done in `testAreaConvergence`, `testVolumeConvergence`, and `testmindtConvergence`.
+
+\
+\
+\
 
 ## Optional Tasks
 
@@ -106,6 +140,8 @@ I edited the inner loop so that it can be run in parallel, and compared the time
 <figcaption> <b> Figure 4. </b> Boxplot of Serial and Parallel computation of 4 runs each</figcaption>
 </figure>
 
+\
+
 The parallelization results 23.96% less time taken on average. (ttest p-value: 2.9e-06)
 
 ### OOP and parallelizing class objects
@@ -116,6 +152,8 @@ The parallelization results 23.96% less time taken on average. (ttest p-value: 2
 <img src="./figures/rbcs.PNG">
 <figcaption> <b> Figure 5. </b> 4 RBC computation with 1500 iterations</figcaption>
 </figure>
+
+\
 
 Some are stuck in a local minima where the shapes are not exactly RBCs since the random seed is different for each workers
 , but the parallelization runs without an error.
