@@ -1,7 +1,7 @@
 # Module 3 Noah
 This is a repository for the module 3 of Software Design Workshop.
 
-\
+
 
 ## Exercise 1
 
@@ -32,9 +32,10 @@ useful for visualization.
 <figcaption> <b> Figure 1. </b> Exercise 1 Results </figcaption>
 </figure>
 
-\
-\
-\
+
+
+
+
 
 ## Exercise 2
 
@@ -69,9 +70,9 @@ The `calculate_delta_t` first calculates the dt per vertex, and returns the mini
 <figcaption> <b> Figure 2. </b> Exercise 2 Results </figcaption>
 </figure>
 
-\
-\
-\
+
+
+
 
 ## Exercise 3
 
@@ -101,7 +102,7 @@ running the `calculate_forces` in parallel or not. If true, the forces will be c
 <figcaption> <b> Figure 3. </b> Red Blood Cell simulation and convergence plot </figcaption>
 </figure>
 
-\
+
 
 We see above that the sphere has transformed into a shape of Red Blood Cell(RBC) in 1500 iterations.
 To check the convergence, the ratio between the current value and the optimum value for area and volume were plotted.
@@ -122,9 +123,9 @@ After the 1000 iterations, the mesh should converge to a dice-like structure wit
 the last 10 iterations should be close to the optimal values, `A_0` and `V_0`. The `min_dt` should be very small too.
 These tests are done in `testAreaConvergence`, `testVolumeConvergence`, and `testmindtConvergence`.
 
-\
-\
-\
+
+
+
 
 ## Optional Tasks
 
@@ -140,7 +141,7 @@ I edited the inner loop so that it can be run in parallel, and compared the time
 <figcaption> <b> Figure 4. </b> Boxplot of Serial and Parallel computation of 4 runs each</figcaption>
 </figure>
 
-\
+
 
 The parallelization results 23.96% less time taken on average. (ttest p-value: 2.9e-06)
 
@@ -153,7 +154,7 @@ The parallelization results 23.96% less time taken on average. (ttest p-value: 2
 <figcaption> <b> Figure 5. </b> 4 RBC computation with 1500 iterations</figcaption>
 </figure>
 
-\
+
 
 Some are stuck in a local minima where the shapes are not exactly RBCs since the random seed is different for each workers
 , but the parallelization runs without an error.
