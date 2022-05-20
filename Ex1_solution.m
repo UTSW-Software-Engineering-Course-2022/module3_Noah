@@ -33,16 +33,21 @@ pts = linspace(0,1,1000); % points to evaluate the estimator
 fig=figure;
 subplot(2,2,1);
 plot(m,'f',fig, 'col', H_diff, 'col_min', 0, 'col_max', max(H_diff), 'colBar', true);
+title("Optimal Mesh")
 subplot(2,2,2);
 plot(new_m,'f',fig, 'col', H_diff_new_clipped, 'col_min', 0, 'col_max', max(H_diff_new_clipped), 'colBar', true);
+title("Minor distortion")
 subplot(2,2,3);
 plot(worse_m,'f',fig, 'col', H_diff_worse_clipped, 'col_min', 0, 'col_max', max(H_diff_worse_clipped), 'colBar', true);
+title("Significant distortion")
 subplot(2,2,4);
 ksdensity(H_diff, pts); hold on;
 ksdensity(H_diff_new, pts); hold on;
 ksdensity(H_diff_worse, pts);
 lgd = legend('Optimal Mesh','Minor distortion', 'Significant distortion');
+title("Probability Density of [0,1) Normalized delta H")
 xlabel('[0,1) Normalized delta H')
+ylabel("Density")
 exportgraphics(fig,'/home2/s438167/module3_Noah/outputs/Figure1.png','Resolution',300)
 
 

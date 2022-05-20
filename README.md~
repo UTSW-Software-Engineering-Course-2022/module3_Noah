@@ -70,8 +70,7 @@ The `calculate_delta_t` first calculates the dt per vertex, and returns the mini
 [F_b, F_a, F_v] = calculate_forces(m, delta_val, k_a, k_v, r, M)
 ```
 
-This function calculates the bending force, surface tension force,
-and pressure force, so they are added on to the total force to be considered in the Langevin calculation.
+This function calculates the Bending force, surface tension foce that is to be added on to the total force considered in the Langevin calculation.
 
 ```matlab
 [m,stds,As,Vs, min_dts] = Run_iterations_LE(m, V0, k_c, k_a, k_v, k_r, t, delta_val, save, par)
@@ -108,14 +107,3 @@ I edited the inner loop so that it can be run in parallel, and compared the time
 
 The parallelization results 23.96% less time taken on average. (ttest p-value: 2.9e-06)
 
-### OOP and parallelizing class objects
-
-`RBC` contains the classdef and methods, and `RBC_parallel` runs 4 parallel computation on 4 meshes.
-
-<figure>
-<img src="./figures/rbcs.png">
-<figcaption> <b> Figure 5. </b> 4 RBC computation with 1500 iterations</figcaption>
-</figure>
-
-Some are stuck in a local minima where the shapes are not exactly RBCs since the random seed is different for each workers
-, but the parallelization runs without an error.

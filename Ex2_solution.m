@@ -39,16 +39,24 @@ for i = 1:t
     Y = sprintf('Std of edge length %d',std_edge_l);
     disp(Y)
     [F_tot, X_int_mtx] = compute_F_tot(m,Fi,dir_ij,L);
-    min_dt = calculate_delta_t(m,Fi,F_tot,L);
+    min_dt = calculate_delta_t(m,Fi,F_tot,L,X_int_mtx);
     m.var.coord = m.var.coord + m.pm.mu * (F_tot + F_r) * min_dt;
 end    
+
+%% For plotting
+before_m.pm.k_c = 1;
+m.pm.k_c = 1;
+H_before = Helfrich(before_m);
+H_after = Helfrich(m);
 
 %% Plot Before and after
 fig=figure;
 subplot(1,2,1);
-plot(before_m,'f',fig);
+plot(before_m,'f',fig, 'col', H_before, 'col_min', 0, 'col_max', max(H_before), 'colBar', true);
+title("Before Langevin Propagation on F internal")
 subplot(1,2,2);
-plot(m,'f',fig);
+plot(m,'f',fig, 'col', H_after, 'col_min', 0, 'col_max', max(H_after), 'colBar', true);
+title("After Langevin Propagation on F internal")
 
 %% Plot edge length stds
 plot(linspace(1,t,t), stds, figure2);
