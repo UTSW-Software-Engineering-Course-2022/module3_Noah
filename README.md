@@ -102,7 +102,7 @@ two nested for loops. The outer one loops over the x,y,z dimensions and the inne
 I edited the inner loop so that it can be run in parallel, and compared the time between the serial and parallel computation.
 
 <figure>
-<img src="./figures/compute_time.png">
+<img src="./figures/compute_time.PNG">
 <figcaption> <b> Figure 4. </b> Boxplot of Serial and Parallel computation of 4 runs each</figcaption>
 </figure>
 
@@ -113,7 +113,7 @@ The parallelization results 23.96% less time taken on average. (ttest p-value: 2
 `RBC` contains the classdef and methods, and `RBC_parallel` runs 4 parallel computation on 4 meshes.
 
 <figure>
-<img src="./figures/rbcs.png">
+<img src="./figures/rbcs.PNG">
 <figcaption> <b> Figure 5. </b> 4 RBC computation with 1500 iterations</figcaption>
 </figure>
 
